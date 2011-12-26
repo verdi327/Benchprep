@@ -3,34 +3,34 @@ require 'httparty'
 require 'awesome_print'
 require "json"
 
-
-# Developer Key for YouTube
-# AI39si41yjmL_5qUULNRJYm2x4HHcKwfEapPFsFo7kkuF-g5JY4OTkgQskkAd6UfFTM4uKV2QC9mZ8Ss06uCkk3RYro2pL2cww
-
-# AllowedFormats = { 
-#   :xml => %w[application/xml application/atom+xml text/xml], 
-#   :json => %w[application/json text/json] 
-# }
-
-# feed, entry, description
-# <media:thumbnail>
-# <media:title>
-# <media:description>
-
 class YouTube
   include HTTParty
   base_uri "https://gdata.youtube.com/feeds/api/videos?"
   default_params apiKey: "AI39si41yjmL_5qUULNRJYm2x4HHcKwfEapPFsFo7kkuF-g5JY4OTkgQskkAd6UfFTM4uKV2QC9mZ8Ss06uCkk3RYro2pL2cww"
-  format :xml
+  format :json
   
   def self.get_video_by_keyword(keyword)
-     get("q=#{keyword}")
+     get("q=#{keyword}&max-results=1&alt=json")  
   end
-   
-   
+  
 end
 
-ap YouTube.get_video_by_keyword("ravens")
+@video = Hash.new
+YouTube.get_video_by_keyword("ravens").each do |result|
+  ap result[1]
+end
+
+
+
+
+
+# YouTube.get_video_by_keyword("ravens").each do |video|
+#   ap video["feed"]["entry"]["title"]
+#   ap video["feed"]["entry"]["media:group"]["media:thumbnail"]["url"]
+#   ap video["feed"]["entry"]["media:group"]["media:description"]
+# end
+
+
 
 
 
@@ -45,37 +45,9 @@ ap YouTube.get_video_by_keyword("ravens")
 # end
 # 
 # Twitter.public_timeline.each do |item|
-#   ap item['user']['screen_name']
-#   ap item['text']
+#   ap item['user']
 # end
 
-####################Failed Attempt########################
-# class YouTube
-#   include HTTParty
-#  
-#   base_uri "https://gdata.youtube.com/feeds/api/videos?"
-#  
-#   attr_accessor :title, :thumbnail, :description
-#  
-#   def initialize(title, thumbnail, description)
-#     self.title = title
-#     self.thumbnail = thumbnail
-#     self.description = description
-#   end
-#  
-#   # Find a particular video, based on its name
-#   def self.find(title)
-#     response = get("q=#{title}")
-#     if response.success?
-#       self.new(response["title"], response["thumbnail"], response["description"])
-#     else
-#       # this just raises the net/http response that was raised
-#       raise response.response    
-#     end
-#   end
-# end
-# 
-# ap YouTube.find("tebow")
 
 
 
