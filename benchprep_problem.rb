@@ -10,31 +10,25 @@ class YouTube
   format :json
   
   def self.get_video_by_keyword(keyword)
-     @results = get("q=#{keyword}&max-results=1&fields=entry&alt=json")  
+     get("q=#{keyword}&max-results=10&fields=entry&alt=json")  
   end
   
 end
 
 results = YouTube.get_video_by_keyword("ravens")
-results.each do |result|
-  ap result[1]["entry"][0]
+results["feed"]["entry"].each do |item|
+  ap item["media$group"]["media$title"]["$t"]
+  ap item["media$group"]["media$thumbnail"][0]
+  ap item["media$group"]["media$description"]["$t"]  
 end
 
 
 
 
 
-# YouTube.get_video_by_keyword("ravens").each do |video|
-#   ap video["feed"]["entry"]["title"]
-#   ap video["feed"]["entry"]["media:group"]["media:thumbnail"]["url"]
-#   ap video["feed"]["entry"]["media:group"]["media:description"]
-# end
 
 
-
-
-
-#########Twitter Example###############
+#########Twitter Example For Fun As Well###############
 # class Twitter
 #   include HTTParty
 #   base_uri 'twitter.com'
@@ -45,7 +39,8 @@ end
 # end
 # 
 # Twitter.public_timeline.each do |item|
-#   ap item['user']
+#   ap item['user']['screen_name']
+#   ap item['text]
 # end
 
 
