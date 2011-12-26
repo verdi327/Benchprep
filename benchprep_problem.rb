@@ -10,14 +10,14 @@ class YouTube
   format :json
   
   def self.get_video_by_keyword(keyword)
-     get("q=#{keyword}&max-results=1&alt=json")  
+     @results = get("q=#{keyword}&max-results=1&fields=entry&alt=json")  
   end
   
 end
 
-@video = Hash.new
-YouTube.get_video_by_keyword("ravens").each do |result|
-  ap result[1]
+results = YouTube.get_video_by_keyword("ravens")
+results.each do |result|
+  ap result[1]["entry"][0]
 end
 
 
